@@ -23,7 +23,7 @@ log_message "Starting Git backup and synchronization..."
 
 # Navigate to the repository
 cd "$REPO_DIR" || {
-    log_message "❌ Repository directory not found! Exiting."
+    log_message "Repository directory not found! Exiting."
     exit 1
 }
 
@@ -31,7 +31,7 @@ cd "$REPO_DIR" || {
 log_message "🔹 Fetching latest changes..."
 git fetch origin "$BRANCH"
 if [ $? -ne 0 ]; then
-    log_message "❌ Failed to fetch latest changes!"
+    log_message "Failed to fetch latest changes!"
     send_alert "Git Backup Error" "Failed to fetch latest changes from Git."
     exit 1
 fi
@@ -41,13 +41,13 @@ TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_NAME="git_backup_$TIMESTAMP.tar.gz"
 log_message "🔹 Creating a backup of the current state..."
 tar -czf "$BACKUP_DIR/$BACKUP_NAME" "$REPO_DIR"
-log_message "✅ Backup created: $BACKUP_DIR/$BACKUP_NAME"
+log_message "Backup created: $BACKUP_DIR/$BACKUP_NAME"
 
 # Pull the latest changes
 log_message "🔹 Pulling latest changes from $BRANCH..."
 git pull origin "$BRANCH"
 if [ $? -ne 0 ]; then
-    log_message "❌ Failed to pull latest changes!"
+    log_message "Failed to pull latest changes!"
     send_alert "Git Backup Error" "Git pull failed for repository $REPO_DIR."
     exit 1
 fi
@@ -59,10 +59,10 @@ if [[ -n $(git status --porcelain) ]]; then
     COMMIT_MSG="Auto backup & sync on $(date)"
     git commit -m "$COMMIT_MSG"
     git push origin "$BRANCH"
-    log_message "✅ Changes committed and pushed successfully."
+    log_message "Changes committed and pushed successfully."
 else
-    log_message "✅ No new changes to commit."
+    log_message "No new changes to commit."
 fi
 
-log_message "✅ Git backup and synchronization completed successfully!"
+log_message "Git backup and synchronization completed successfully!"
 send_alert "Git Backup Success" "Git backup and sync completed successfully."
