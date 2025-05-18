@@ -1,3 +1,5 @@
+# create a backup of certain directories on a Linux-based system, compress them into a ( .tar.gz ) archive, and then upload the backup to an AWS S3 bucket and includes retention policy to manage how long backup are kept 
+
 #!/bin/bash
 
 # Configuration
