@@ -12,7 +12,7 @@ log_message() {
     echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" | tee -a "$LOG_FILE"
 }
 
-# Function to send email alerts (optional)
+# Function to send email alerts
 send_alert() {
     local subject=$1
     local message=$2
@@ -28,7 +28,7 @@ cd "$REPO_DIR" || {
 }
 
 # Fetch the latest updates
-log_message "🔹 Fetching latest changes..."
+log_message "Fetching latest changes..."
 git fetch origin "$BRANCH"
 if [ $? -ne 0 ]; then
     log_message "Failed to fetch latest changes!"
@@ -39,12 +39,12 @@ fi
 # Create a backup before pulling changes
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_NAME="git_backup_$TIMESTAMP.tar.gz"
-log_message "🔹 Creating a backup of the current state..."
+log_message "Creating a backup of the current state..."
 tar -czf "$BACKUP_DIR/$BACKUP_NAME" "$REPO_DIR"
 log_message "Backup created: $BACKUP_DIR/$BACKUP_NAME"
 
 # Pull the latest changes
-log_message "🔹 Pulling latest changes from $BRANCH..."
+log_message "Pulling latest changes from $BRANCH..."
 git pull origin "$BRANCH"
 if [ $? -ne 0 ]; then
     log_message "Failed to pull latest changes!"
@@ -53,7 +53,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Auto-add, commit, and push new changes (optional)
-log_message "🔹 Checking for uncommitted changes..."
+log_message "Checking for uncommitted changes..."
 if [[ -n $(git status --porcelain) ]]; then
     git add .
     COMMIT_MSG="Auto backup & sync on $(date)"
